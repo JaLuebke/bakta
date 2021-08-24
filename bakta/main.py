@@ -248,12 +248,13 @@ def main():
         print(f'\tdiscarded spurious: {len(discarded_cdss)}')
         cdss = [cds for cds in cdss if 'discarded' not in cds]
 
-        log.debug('lookup CDS UPS/IPS')
-        cdss_ups, cdss_not_found = ups.lookup(cdss)
-        cdss_ips, tmp = ips.lookup(cdss_ups)
-        cdss_not_found.extend(tmp)
-        print(f'\tdetected IPSs: {len(cdss_ips)}')
+        # log.debug('lookup CDS UPS/IPS')
+        # cdss_ups, cdss_not_found = ups.lookup(cdss)
+        # cdss_ips, tmp = ips.lookup(cdss_ups)
+        # cdss_not_found.extend(tmp)
+        # print(f'\tdetected IPSs: {len(cdss_ips)}')
 
+        cdss_not_found = cdss
         if(len(cdss_not_found) > 0):
             cds_fasta_path = cfg.tmp_path.joinpath('cds.unidentified.faa')
             with cds_fasta_path.open(mode='w') as fh:
@@ -320,22 +321,22 @@ def main():
         print(f'\tdiscarded spurious: {len(discarded_sorfs)}')
         sorfs = [sorf for sorf in sorfs if 'discarded' not in sorf]
 
-        log.debug('lookup sORF UPS/IPS')
-        sorf_upss, sorfs_not_found = ups.lookup(sorfs)
-        sorf_ipss, tmp = ips.lookup(sorf_upss)
-        sorfs_not_found.extend(tmp)
-        print(f'\tdetected IPSs: {len(sorf_ipss)}')
+        # log.debug('lookup sORF UPS/IPS')
+        # sorf_upss, sorfs_not_found = ups.lookup(sorfs)
+        # sorf_ipss, tmp = ips.lookup(sorf_upss)
+        # sorfs_not_found.extend(tmp)
+        # print(f'\tdetected IPSs: {len(sorf_ipss)}')
 
         sorf_pscs = []
-        if(len(sorfs_not_found) > 0):
+        if(len(sorfs) > 0):
             log.debug('search sORF PSC')
-            tmp, sorfs_not_found = s_orf.search_pscs(sorfs_not_found)
+            tmp, sorfs_not_found = s_orf.search_pscs(sorfs)
             sorf_pscs.extend(tmp)
             print(f'\tfound PSCs: {len(sorf_pscs)}')
 
         print("\tlookup annotations...")
         log.debug('lookup sORF PSCs')
-        sorf_pscs.extend(sorf_ipss)
+        # sorf_pscs.extend(sorf_ipss)
         psc.lookup(sorf_pscs)  # lookup PSC info
         print('\tfilter and combine annotations...')
         log.debug('filter sORF by annotations')
